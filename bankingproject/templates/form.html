@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer</title>
+     <style>
+        #customerForm {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<h1>Customer Application</h1>
+<button id="showFormButton">Show Form</button><br>
+<form id="customerForm" method="post" action="{% url 'application' %}">
+    {% csrf_token %}
+    <br><input type="text" name="name" placeholder="Name" ><br>
+    <label>DOB:</label>
+        <input type="date" name="dob" placeholder="Date of birth" ><br>
+    <input type="tel" name="age" placeholder="Age" ><br>
+<!--    <input type="text" name="gender" placeholder="Gender" ><br>-->
+    <label>Gender:</label><br>
+        <input type="checkbox" id="gender1" name="gender1" value="gender1">
+        <label for="gender1">Male</label><br>
+        <input type="checkbox" id="gender2" name="gender2" value="gender2">
+        <label for="gender2">Female</label><br>
+        <input type="checkbox" id="gender3" name="gender3" value="gender3">
+        <label for="gender3">Other</label><br>
+    <input type="tel" name="mobile" placeholder="Mobile Number" ><br>
+    <input type="email" name="email" placeholder="Email ID" ><br>
+    <input type="text" name="address" placeholder="Address" ><br>
+    <label for="district">District:</label>
+    <select id="district" name="district" required>
+        <option value="district1">Kannur</option>
+        <option value="district2">Kasargod</option>
+        <option value="district3">Idukki</option>
+        <option value="district4">Wayanad</option>
+        <option value="district5">Kozhikode</option>
+    </select><br>
+    <label for="branch">Branch:</label>
+    <select id="branch" name="branch" required>
+        <option value="branch1">Thalassery</option>
+        <option value="branch2">Kanhagad</option>
+        <option value="branch3">Adimali</option>
+        <option value="branch4">Sulthan Bathery</option>
+        <option value="branch5">Atholi</option>
+    </select><br>
+    <label for="account_type">Account type:</label>
+        <select id="account_type" name="account_type" required>
+            <option value="savings">savings</option>
+            <option value="current">current</option>
+            <option value="salary">salary</option>
+        </select><br>
+    <label>Materials Provided:</label><br>
+        <input type="checkbox" id="material1" name="material1" value="material1">
+        <label for="material1">Debit card</label><br>
+        <input type="checkbox" id="material2" name="material2" value="material2">
+        <label for="material2">Credit card</label><br>
+    <input type="submit">
+    <button type="button" >Logout</button><br><br>
+
+</form>
+<p><a href="{% url 'logout' %}">Return to Home page</a></p>
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+<script>
+document.getElementById('showFormButton').addEventListener('click', function() {
+    document.getElementById('customerForm').style.display = 'block';
+    updateBranchOptions(); // Call the function when the form is displayed
+});
+document.getElementById('district').onchange = function() {
+    updateBranchOptions();
+};
+
+function updateBranchOptions() {
+    var districtSelect = document.getElementById("district");
+    var branchSelect = document.getElementById("branch");
+
+
+    branchSelect.innerHTML = "";
+
+
+    var branchOptions = [];
+
+    switch (districtSelect.value) {
+        case "district1":
+            branchOptions = ["Thalassery"];
+            break;
+        case "district2":
+            branchOptions = ["Kanhagad"];
+            break;
+        case "district3":
+            branchOptions = ["Adimali"];
+            break;
+        case "district4":
+            branchOptions = ["Sulthan Bathery"];
+            break;
+        case "district5":
+            branchOptions = ["Atholi"];
+            break;
+        default:
+            branchOptions = ["Default Branch"];
+    }
+
+    for (var i = 0; i < branchOptions.length; i++) {
+        var option = document.createElement("option");
+        option.value = "branch" + (i + 1);
+        option.text = branchOptions[i];
+        branchSelect.add(option);
+    }
+}
+</script>
+</body>
+</html>
+{% endblock %}
